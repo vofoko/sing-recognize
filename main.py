@@ -37,7 +37,6 @@ class TrainDataset(Dataset):
             if l != 0:
               y[l-1] = 1.0
 
-        # читаем картинку. read the image
         image = cv2.imread(f"./train/{image_name}")
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         image = Image.fromarray(image)
@@ -61,17 +60,12 @@ class TestDataset(Dataset):
         self.transform = transform
 
     def __getitem__(self, idx):
-        # достаем имя изображения и ее лейбл
         image_name = self.data_df.iloc[idx]['img']
 
-
-        # читаем картинку. read the image
         image = cv2.imread(f"./test/{image_name}")
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         image = Image.fromarray(image)
         
-        
-        # преобразуем, если нужно. transform it, if necessary
         if self.transform:
             image = self.transform(image)
         
@@ -87,8 +81,7 @@ data_df = pd.read_csv("./train.csv")
 
 
 
-# разделим датасет на трейн и валидацию, чтобы смотреть на качество
-train_df, valid_df = train_test_split(data_df, test_size=0.00, random_state=0) # обучим для получения конечной можели на всем датасете
+train_df, valid_df = train_test_split(data_df, test_size=0.00, random_state=0) # обучим для получения конечной модели на всем датасете
 
 train_dataset = TrainDataset(train_df, train_transform)
 valid_dataset = TrainDataset(valid_df, valid_transform)
@@ -225,9 +218,6 @@ train_loss_log, train_acc_log, val_loss_log, val_acc_log, best_model = train(mod
 
 model.eval()
 
-#data_test_df = pd.read_csv("/content/drive/MyDrive/olympy/DIGIT/2022/Krasnodar_sign/sample_solution.csv") #pd.read_csv("/content/test.csv")
-
-
 data_test_df = pd.read_csv("./test.csv")
 test_dataset = TestDataset(data_test_df, valid_transform)
 test_loader = torch.utils.data.DataLoader(dataset=test_dataset,
@@ -235,8 +225,6 @@ test_loader = torch.utils.data.DataLoader(dataset=test_dataset,
                                            shuffle=False)
 
                                            
-
-
 submission_df = pd.read_csv("./sample_solution.csv")
 
 count = 0
@@ -257,8 +245,6 @@ for imgs in tqdm(test_loader):
         
         sing_name = 'sing' + str(1 + i)
         submission_df.iloc[count][sing_name] = idx+1
-
-
 
     count+=1
 
