@@ -193,7 +193,7 @@ class MyModel (nn.Module):
     def __init__(self, n_classes, model = None):
         super().__init__()
         if model is None:
-            self.effnet = torchvision.models.resnet50(weights = 'IMAGENET1K_V2')
+            self.model = torchvision.models.resnet50(weights = 'IMAGENET1K_V2')
 
         else:
             self.model = model
@@ -205,7 +205,7 @@ class MyModel (nn.Module):
                                )
         
     def forward(self,x):
-        x=self.effnet(x)
+        x=self.model(x)
         out=self.out(x)
         return out
 
